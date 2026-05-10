@@ -1,6 +1,5 @@
 from typer import (
     Typer,
-    BadParameter,
     Argument,
     Option
 )
@@ -18,8 +17,9 @@ app: Typer = Typer(add_completion=False)
 def main():
     pass
 
-@app.command()
-def build(base_path: str = Argument("."), silent: bool = Option(False, "--silent")):
+@app.command(help="Build .lpk from manifest.lpack")
+def build(base_path: str = Argument(".", help="The path to the folder in which manifest.lpack exists."),
+          silent: bool = Option(False, "--silent", help="Do not print any output.")):
     class Call(BuildCallback):
         def __init__(self):
             super().__init__()
