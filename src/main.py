@@ -13,8 +13,10 @@ from installer.installer import install_lpack
 from remover.remover import remove_lpk
 from remover.callback import Callback as RemoveCallback
 
-try: from searcher import search_all, search_one
-except ImportError: from .searcher import search_all, search_one
+try:
+    from searcher import search_all, search_one
+except ImportError:
+    from .searcher import search_all, search_one
 
 
 app: Typer = Typer(add_completion=False)
@@ -180,42 +182,50 @@ def remove(
             f"Installation was successfull in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
         )
 
+
 @app.command(help="Search installed packages.")
 def search(
-    package_name:str|None=Argument(
-        None,
-        help="Optional package id to inspect."
-    ),
-    system_wide:bool=Option(
-        False,
-        "--system-wide",
-        help="Search in system wide installed packages."
+    package_name: str | None = Argument(None, help="Optional package id to inspect."),
+    system_wide: bool = Option(
+        False, "--system-wide", help="Search in system wide installed packages."
     ),
 ):
-    start=time()
+    start = time()
     try:
         if package_name is None:
-            packages=search_all(system_wide)
+            packages = search_all(system_wide)
             if not packages:
                 print("[bright_yellow]No packages found.[/bright_yellow]")
                 return
-            for package,version in packages:
+            for package, version in packages:
                 print(
                     f"[bright_cyan]{package}[/bright_cyan] "
                     f"[bright_white]{version}[/bright_white]"
                 )
         else:
-            data=search_one(package_name,system_wide)
-            print(f"[bright_cyan]Package:[/bright_cyan] [bright_white]{package_name}[/bright_white]")
-            print(f"[bright_cyan]Name:[/bright_cyan] [bright_white]{data['name']}[/bright_white]")
-            print(f"[bright_cyan]Version:[/bright_cyan] [bright_white]{data['version']}[/bright_white]")
-            print(f"[bright_cyan]Description:[/bright_cyan] [bright_white]{data['description']}[/bright_white]")
-            print(f"[bright_cyan]Desktop:[/bright_cyan] [bright_white]{data['desktop']}[/bright_white]")
-            print(f"[bright_cyan]Symlink:[/bright_cyan] [bright_white]{data['symlink']}[/bright_white]")
+            data = search_one(package_name, system_wide)
+            print(
+                f"[bright_cyan]Package:[/bright_cyan] [bright_white]{package_name}[/bright_white]"
+            )
+            print(
+                f"[bright_cyan]Name:[/bright_cyan] [bright_white]{data['name']}[/bright_white]"
+            )
+            print(
+                f"[bright_cyan]Version:[/bright_cyan] [bright_white]{data['version']}[/bright_white]"
+            )
+            print(
+                f"[bright_cyan]Description:[/bright_cyan] [bright_white]{data['description']}[/bright_white]"
+            )
+            print(
+                f"[bright_cyan]Desktop:[/bright_cyan] [bright_white]{data['desktop']}[/bright_white]"
+            )
+            print(
+                f"[bright_cyan]Symlink:[/bright_cyan] [bright_white]{data['symlink']}[/bright_white]"
+            )
         print(
             f"[bright_green][SUCCESS][/bright_green] "
             f"[bright_white]Search completed in "
-            f"[bright_cyan]{round(time()-start,2)}s[/bright_cyan][/bright_white]"
+            f"[bright_cyan]{round(time() - start, 2)}s[/bright_cyan][/bright_white]"
         )
     except Exception as err:
         print(f"[bright_red][ERROR][/bright_red] [bright_white]{err}[/bright_white]")
