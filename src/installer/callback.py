@@ -7,3 +7,9 @@ class Callback:
     def on_some_success(self, msg): ...
     def on_some_error(self, msg): ...
     def on_unknow_error(self, msg): ...
+
+    def prompt_string(self, msg) -> str:
+        return ""
+
+    def prompt_confirm(self, msg, default: bool) -> bool:
+        return default

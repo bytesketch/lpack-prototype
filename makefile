@@ -31,8 +31,5 @@ clean:
 
 install:
 	@echo "Installing... (sudo needed)"
-	@sudo rm -rf /opt/lpack
-	@sudo cp -r dist/lpack /opt/
-	@sudo rm -f /usr/bin/lpack
-	@sudo ln -s /opt/lpack/lpack /usr/bin/lpack
-	@echo "Install successful."
+	@./.venv/bin/python3 src/main.py build
+	@sudo ./.venv/bin/python src/main.py install lpack/build/lpack-1.0-prototype.lpk --system-wide

@@ -1,26 +1,26 @@
 from pathlib import Path
-from shutil import rmtree, copy2
+from shutil import rmtree, copy2, copytree
 from .manifest import Manifest, App, Desktop
 from zipfile import ZipFile, ZIP_DEFLATED
 from .callback import Callback
 import json
 
-"""
-def deobfuscate(all_bytes: bytes) -> bytes:
-    return bytes((((((b >> 3) | (b << 5)) & 0xFF) - 17) & 0xFF) ^ 0x5A
-        for b in all_bytes
-    )
-"""
 
 def obfuscate(all_bytes: bytes) -> bytes:
-    return bytes(((((b ^ 0x5A) + 17) & 0xFF) << 3 | ((((b ^ 0x5A) + 17) & 0xFF) >> 5)) & 0xFF for b in all_bytes)
+    return bytes(
+        ((((b ^ 0x5A) + 17) & 0xFF) << 3 | ((((b ^ 0x5A) + 17) & 0xFF) >> 5)) & 0xFF
+        for b in all_bytes
+    )
+
 
 def compress(target_file, dir, call: Callback):
     dir = Path(dir)
     target_file = Path(target_file)
     call.on_some_info(f"Compressing '{dir}' -> '{target_file.name}'")
     try:
-        with ZipFile(target_file, "w", compression=ZIP_DEFLATED, compresslevel=9) as zipf:
+        with ZipFile(
+            target_file, "w", compression=ZIP_DEFLATED, compresslevel=9
+        ) as zipf:
             for file in dir.rglob("*"):
                 if file.is_file():
                     zipf.write(file, file.relative_to(dir))
@@ -28,6 +28,7 @@ def compress(target_file, dir, call: Callback):
         call.on_some_success(f"Archive created successfully: {target_file}")
     except Exception as err:
         call.on_some_error(f"Failed to compress archive: {err}")
+
 
 class NotDictionary(Exception):
     def __init__(self, *args):
@@ -38,10 +39,12 @@ class NotDictionary(Exception):
         if not isinstance(item, dict):
             raise NotDictionary("Expected dictionary object.")
 
+
 def get_field_of_manifest(manifest, key: str) -> object:
     if key in manifest.keys():
         return manifest[key]
     return None
+
 
 def parse_manifest(manifest) -> Manifest:
     NotDictionary.check_dict(manifest)
@@ -87,6 +90,7 @@ def parse_manifest(manifest) -> Manifest:
     base.compile()
     return base
 
+
 def build_lpack(root_dir: Path, call: Callback) -> None:
     try:
         call.on_some_info(f"Starting build in '{root_dir}'")
@@ -120,7 +124,9 @@ def build_lpack(root_dir: Path, call: Callback) -> None:
                 target = temp_app / file.name
                 if file.is_file():
                     copy2(file, target)
-                    call.on_some_success(f"Copied: {file.name}")
+                else:
+                    copytree(file, target)
+                call.on_some_success(f"Copied: {file.name}")
             except Exception as err:
                 call.on_some_error(f"Failed to copy '{file}': {err}")
         if manifest.include is not None:
@@ -142,19 +148,19 @@ def build_lpack(root_dir: Path, call: Callback) -> None:
                 "package": manifest.pack.package_name,
                 "name": manifest.pack.name,
                 "description": manifest.description,
-                "version": manifest.pack.version
+                "version": manifest.pack.version,
             }
         }
         if manifest.app is not None:
             final_manifest["app"] = {
                 "entry": manifest.app.entry,
-                "executable": manifest.app.binary
+                "executable": manifest.app.binary,
             }
         if manifest.desk is not None:
             final_manifest["desktop"] = {
                 "name": manifest.desk.name,
                 "icon": manifest.desk.icon,
-                "exec": manifest.desk.exec
+                "exec": manifest.desk.exec,
             }
         call.on_some_info("Generating obfuscated manifest.")
         data: bytes = obfuscate(json.dumps(final_manifest).encode("utf-8"))
@@ -163,7 +169,10 @@ def build_lpack(root_dir: Path, call: Callback) -> None:
         call.on_some_success("Manifest generated successfully.")
         build_out: Path = temp.parent / "build"
         build_out.mkdir(exist_ok=True)
-        output_file = build_out / f"{final_manifest['info']['name']}-{final_manifest['info']['version']}.lpk"
+        output_file = (
+            build_out
+            / f"{final_manifest['info']['name']}-{final_manifest['info']['version']}.lpk"
+        )
         compress(output_file, temp, call)
     except Exception as err:
         call.on_unknow_error(str(err))

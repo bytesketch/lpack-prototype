@@ -215,7 +215,6 @@ poetry.lock
 # ==========================================
 # Generated package metadata
 # ==========================================
-manifest.lpack
 files.list
 checksums.sha256
 signature.sig

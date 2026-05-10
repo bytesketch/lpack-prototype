@@ -1,0 +1,20 @@
+{
+    "build_path": "dist/lpack",
+    "description": "",
+
+    "package": {
+        "name": "lpack",
+        "package": "bytesketch.lpack",
+        "version": "1.0-prototype",
+        "authors": ["Ali Ahmad @bytesketch"]
+    },
+
+    "app": {
+        "binary": "lpack",
+        "entry": "lpack"
+    },
+
+    "include": {
+        "LICENSE": "info/LICENSE"
+    }
+}

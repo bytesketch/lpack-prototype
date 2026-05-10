@@ -6,11 +6,13 @@ class Manifest:
         self.desk: Desktop | None = None
         self.include: dict[str, str] | None = None
         self.build_base_dir: str = "path/to/build/dir"
-    
+
     def __check_type(self, val, hint):
         if not isinstance(val, hint):
-            raise TypeError(f"Invalid type detected. Expected {hint}, found {type(val)}.")
-    
+            raise TypeError(
+                f"Invalid type detected. Expected {hint}, found {type(val)}."
+            )
+
     def compile(self):
         self.__check_type(self.build_base_dir, str)
         self.__check_type(self.description, str)
@@ -28,22 +30,24 @@ class Manifest:
             self.__check_type(self.app, App)
             self.__check_type(self.app.binary, str)
             self.__check_type(self.app.entry, str)
-        
+
         if not self.desk is None:
             self.__check_type(self.desk, Desktop)
             self.__check_type(self.desk.exec, str)
             self.__check_type(self.desk.icon, str)
             self.__check_type(self.desk.name, str)
-        
+
         if not self.include is None:
             self.__check_type(self.include, dict)
             for key in self.include.keys():
                 self.__check_type(key, str)
                 self.__check_type(self.include[key], str)
-    
+
     @staticmethod
     def example_json() -> str:
-        return 
+        return
+
+
 """{
     "build_path": "path/to/build/dir", // REQUIRED
 
@@ -70,6 +74,7 @@ class Manifest:
     }
 }"""
 
+
 class Package:
     def __init__(self):
         self.name: str = "app-name"
@@ -77,10 +82,12 @@ class Package:
         self.version: str = "1.0.0"
         self.authors: list[str] | None = None
 
+
 class App:
     def __init__(self):
         self.binary: str = "path/to/app"
         self.entry: str = "app"
+
 
 class Desktop:
     def __init__(self):
