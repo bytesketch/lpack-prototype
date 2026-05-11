@@ -69,7 +69,7 @@ def build(
     build_lpack(Path(base_path), call)
     if not call.errored:
         call.on_some_success(
-            f"Build was successfull in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
+            f"Build was successful in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
         )
 
 
@@ -124,7 +124,7 @@ def install(
     install_lpack(Path(pack_path), system_wide, call)
     if not call.errored:
         call.on_some_success(
-            f"Installation was successfull in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
+            f"Installation was successful in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
         )
 
 
@@ -179,7 +179,7 @@ def remove(
     remove_lpk(pack, system_wide, call)
     if not call.errored:
         call.on_some_success(
-            f"Installation was successfull in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
+            f"Installation was successful in [bright_cyan]{round(time() - start, 2)}s[/bright_cyan]"
         )
 
 
