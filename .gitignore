@@ -168,6 +168,7 @@ temp/
 # Your lpack artifacts
 # ==========================================
 *.lpk
+/releases
 
 # ==========================================
 # Optional local config

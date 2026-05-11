@@ -1,13 +1,16 @@
 .PHONY: build help clean install
 
 help:
-	@echo "=============================================="
-	@echo "|          lpack-prototype makefile          |"
-	@echo "=============================================="
-	@echo "Run 'make setup'   (one-time)."
-	@echo "Run 'make build'   to build."
-	@echo "Run 'make install' to install"
-	@echo "Run 'make clean'   to remove caches and build."
+	@echo "|==========================================================|"
+	@echo "|          lpack-prototype makefile                        |"
+	@echo "|==========================================================|"
+	@echo "| Run 'make setup'   (one-time).                           |"
+	@echo "| Run 'make build'   to build.                             |"
+	@echo "| Run 'make install' to install                            |"
+	@echo "| Run 'make clean'   to remove caches and build.           |"
+	@echo "|----------------------------------------------------------|"
+	@echo "| Run 'make build install' after setup. (one-line command) |"
+	@echo "|==========================================================|"
 
 setup:
 	@echo "Checking python..."
@@ -27,7 +30,10 @@ clean:
 	@rm -rf build
 	@rm -rf dist
 	@rm -f *.spec
-	@echo "Cleaning successfull."
+	@rm -rf lpack
+	@rm -rf ./*/*/__pycache__
+	@rm -rf ./*/__pycache__
+	@echo "Cleaning successful."
 
 install:
 	@echo "Installing... (sudo needed)"

@@ -1,6 +1,6 @@
 {
     "build_path": "dist/lpack",
-    "description": "",
+    "description": "lpack is a lightweight Linux package manager built for portable, distro-independent .lpk packages.",
 
     "package": {
         "name": "lpack",
@@ -15,6 +15,7 @@
     },
 
     "include": {
-        "LICENSE": "info/LICENSE"
+        "LICENSE": "docs/LICENSE",
+        "README.md": "docs/README.md"
     }
 }
